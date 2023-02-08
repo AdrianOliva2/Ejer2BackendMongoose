@@ -9,6 +9,11 @@ const courseSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 7
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
     }
 });
 
