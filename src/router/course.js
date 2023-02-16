@@ -27,6 +27,21 @@ router.get('/courses', async (req, res) => {
     }
 })
 
+router.get('/course/:id/owner', async (req, res) => {
+    const courseID = req.params.id;
+
+    try {
+        const course = await Course.findById(courseID);
+
+        if (!course) {
+            return res.status(404).send();
+        }
+        course.populate('owner').then(user => res.status(201).send(user.owner));
+    } catch (e) {
+        res.status(500).send(e);
+    }
+})
+
 router.get('/course/:id', async (req, res) => {
     const _id = req.params.id;
 

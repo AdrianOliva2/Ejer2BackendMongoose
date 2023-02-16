@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Course = require('./course');
 require('dotenv').config();
 
 const SALT = process.env.PORT || 'thisismynewcourse';
@@ -51,12 +52,6 @@ const userSchema = new mongoose.Schema({
         }
     }]
 })
-
-userSchema.virtual('course', {
-    ref: 'Course',
-    localField: '_id',
-    foreignField: 'owner'
-});
 
 userSchema.methods.toJSON = function() {
     const user = this;
