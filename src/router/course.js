@@ -1,13 +1,18 @@
 const express = require('express');
 const Course = require('../model/course');
+const Buy = require('../model/buy');
+const auth = require('../middleware/auth');
 const router = new express.Router();
 
-router.post('/course', async (req, res) => {
-    const course = new Course(req.body);
+router.post('/course', auth, async (req, res) => {
+    const course = req.body;
+    course.owner = req.user._id;
+    const newCourse = new Course(course);
 
     try {
-        await course.save();
-        res.status(201).send(course);
+        await newCourse.save();
+        delete newCourse.owner;
+        res.status(201).send(newCourse);
     } catch (e) {
         res.status(400).send(e);
     }
@@ -37,6 +42,30 @@ router.get('/course/:id', async (req, res) => {
         res.status(500).send(e);
     }
 })
+
+router.post('/course/:id/buy', auth, async (req, res) => {
+    const courseID = req.params.id;
+    const userID = req.user._id;
+    const newBuy = {
+        courseID: courseID,
+        userID: userID
+    };
+    Buy.find(newBuy, async function (err, docs) {
+        if (docs.length){
+            res.status(400).send({ error: 'Already bought!' });
+        } else {
+            newBuy.date = new Date();
+            const buy = new Buy(newBuy);
+            console.log(buy);
+            try {
+                await buy.save();
+                res.status(201).send(buy);
+            } catch (e) {
+                res.status(400).send(e);
+            }
+        }
+    });
+});
 
 router.patch('/course/:id', async (req, res) => {
     const updates = Object.keys(req.body);
