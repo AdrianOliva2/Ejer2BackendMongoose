@@ -10,6 +10,20 @@ const courseSchema = new mongoose.Schema({
         required: true,
         minlength: 7
     },
+    price: {
+        type: Number,
+        required: false,
+        min: 0
+    },
+    duration: {
+        type: Number,
+        required: false,
+        min: 0
+    },
+    image: {
+        type: String,
+        required: false
+    },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
