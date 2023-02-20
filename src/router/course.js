@@ -46,7 +46,7 @@ router.get('/course/:id', async (req, res) => {
     const _id = req.params.id;
 
     try {
-        const course = await Course.findById(_id);
+        const course = await Course.findById(_id).populate('owner');
 
         if (!course) {
             return res.status(404).send();

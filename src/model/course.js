@@ -31,6 +31,16 @@ const courseSchema = new mongoose.Schema({
     }
 });
 
+/*courseSchema.methods.toJSON = function () {
+    const course = this
+    const courseObject = course.toObject()
+
+    courseObject.autor=courseObject.owner.name
+    delete courseObject.owner
+
+    return courseObject
+}*/
+
 const Course = mongoose.model('Course', courseSchema);
 
 module.exports = Course;
